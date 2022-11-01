@@ -45,10 +45,13 @@ spec:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 20
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-          - mountPath: /pygeoapi/local.config.sh
+          - mountPath: /pygeoapi/local.config.yml
             name: pygeoapi-config
             subPath: docker.config.yml            
           - mountPath: /wait-for-elasticsearch.sh
@@ -58,7 +61,7 @@ spec:
             name: pygeoapi-config
             subPath: es-entrypoint.sh
           command:
-          - /es-entrypoint.sh        
+          - /es-entrypoint.sh
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -75,11 +78,4 @@ spec:
       - name: pygeoapi-config
         configMap:
           defaultMode: 493
-          # items:
-          # - key: docker.config.yml
-          #   path: docker.config.yml 
-          # - key: wait-for-elasticsearch.sh
-          #   path: wait-for-elasticsearch.sh
-          # - key: es-entrypoint.sh
-          #   path: es-entrypoint.sh
           name: pygeoapi-config
