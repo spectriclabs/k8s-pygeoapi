@@ -170,9 +170,8 @@ resources:
               data: http://elasticsearch:9200/kibana_sample_data_flights
               id_field: FlightNum
               # Geometry does not work with elasticsearch
-              geometry:
-                  x_field: OriginLocation.lat
-                  y_field: OriginLocation.lon
+              x_field: OriginLocation.lat
+              y_field: OriginLocation.lon
 
 
     lakes:
