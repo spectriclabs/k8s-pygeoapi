@@ -5,11 +5,17 @@
 replicaCount: 1
 
 image:
-  repository: geopython/pygeoapi
+  # repository: geopython/pygeoapi
+  repository: spectriclabs/pygeoapi
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   # tag: "0.12.0"
-  tag: latest
+  tag: debug
+
+debug:
+  # Enable this to use debugpy. 
+  # Docker image must support debug (built with BUILD_DEV_IMAGE=true)
+  enabled: false
 
 imagePullSecrets: []
 nameOverride: ""

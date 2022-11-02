@@ -37,6 +37,10 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+            - name: debug
+              containerPort: 5678
+              protocol: TCP
+          {{- if not .Values.debug.enabled }}
           livenessProbe:
             httpGet:
               path: /
@@ -48,8 +52,18 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             failureThreshold: 20
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.debug.enabled }}
+          env:
+          - name: DEBUGPY
+            value: "True"
+          - name: WSGI_WORKERS
+            value: "1"
+          - name: GEVENT_SUPPORT
+            value: "True"
+          {{- end }}
           volumeMounts:
           - mountPath: /pygeoapi/local.config.yml
             name: pygeoapi-config
@@ -61,6 +75,9 @@ spec:
             name: pygeoapi-config
             subPath: es-entrypoint.sh
           command:
+          # - bash
+          # - -c
+          # - sleep infinity
           - /es-entrypoint.sh
       {{- with .Values.nodeSelector }}
       nodeSelector:
